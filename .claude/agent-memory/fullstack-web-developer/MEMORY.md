@@ -1,0 +1,1 @@
+- [Marketing site context](project_marketing_site.md) — Vercel marketing site for ReceiptParserAPI; Vercel fns proxy to FastAPI backend; no reCAPTCHA; gradient design system

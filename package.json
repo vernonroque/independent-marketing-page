@@ -1,0 +1,14 @@
+{
+  "name": "receipt-parser-marketing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing site for ReceiptParser API — hosted on Vercel",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0",
+    "form-data": "^4.0.0",
+    "node-fetch": "^2.7.0"
+  }
+}

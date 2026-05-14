@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReceiptParser API — Turn Any Receipt Into Structured Data</title>
+  <meta name="description" content="Upload any receipt image via API and get clean, structured JSON back in seconds. Built for developers who need accurate receipt data at scale." />
+
+  <!-- Google Fonts: Syne (display), DM Sans (body), DM Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-64F5KVYEVL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-64F5KVYEVL');
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Background elements -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <!-- Logo -->
+      <div class="logo">
+        <span class="logo-icon">▣</span>
+        <span class="logo-text">ReceiptParser<span class="logo-accent">API</span></span>
+      </div>
+
+      <!-- Desktop Nav Links -->
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#demo" class="nav-link">Demo</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </nav>
+
+      <!-- Nav CTA -->
+      <a href="#pricing" class="btn-nav-cta">Get API Key →</a>
+
+      <!-- Mobile Hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <a href="#features" class="mobile-nav-link">Features</a>
+      <a href="#demo" class="mobile-nav-link">Demo</a>
+      <a href="#pricing" class="mobile-nav-link">Pricing</a>
+      <a href="#pricing" class="btn-nav-cta mobile-cta">Get API Key →</a>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO SECTION
+  ============================================================ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <div class="hero-left">
+        <!-- Badge -->
+        <div class="hero-badge">AI-POWERED · RECEIPT PARSING</div>
+
+        <!-- Headline -->
+        <h1 class="hero-title" id="hero-title">
+          Turn any receipt into<br />
+          <span class="hero-title-gradient">structured data.</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-subtitle">
+          Upload any receipt image via API and get clean, structured JSON back in seconds.
+          Built for developers who need accurate receipt data at scale.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-ctas">
+          <a href="#pricing" class="btn-primary">Get started free →</a>
+          <a href="#demo" class="btn-ghost">Live demo ↓</a>
+        </div>
+      </div>
+
+      <!-- Hero Visual: Receipt → JSON illustration -->
+      <div class="hero-right" aria-hidden="true">
+        <div class="hero-visual">
+          <!-- Receipt Card -->
+          <div class="visual-receipt-card">
+            <div class="visual-receipt-header">
+              <span class="visual-receipt-logo">▣</span>
+              <span class="visual-receipt-merchant">The Golden Fork</span>
+            </div>
+            <div class="visual-receipt-divider"></div>
+            <div class="visual-receipt-items">
+              <div class="visual-receipt-row">
+                <span>Ribeye Steak</span>
+                <span>$42.00</span>
+              </div>
+              <div class="visual-receipt-row">
+                <span>Caesar Salad</span>
+                <span>$14.50</span>
+              </div>
+              <div class="visual-receipt-row">
+                <span>Craft IPA (2x)</span>
+                <span>$18.00</span>
+              </div>
+            </div>
+            <div class="visual-receipt-divider"></div>
+            <div class="visual-receipt-total">
+              <span>Total</span>
+              <span class="visual-total-amount">$106.21</span>
+            </div>
+          </div>
+
+          <!-- Animated Arrow -->
+          <div class="visual-arrow">
+            <div class="arrow-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 2v12M3 9l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- JSON Output Card -->
+          <div class="visual-json-card">
+            <div class="visual-json-header">
+              <span class="visual-json-badge">JSON</span>
+              <span class="visual-json-status">✓ Parsed</span>
+            </div>
+            <pre class="visual-json-code" id="hero-json-output"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Strip -->
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">50+</span>
+        <span class="stat-label">Fields Extracted</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">&lt; 3s</span>
+        <span class="stat-label">Average Parse Time</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">JPG · PNG · PDF</span>
+        <span class="stat-label">Supported Formats</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">Any Type</span>
+        <span class="stat-label">Receipt Category</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FEATURES / HOW IT WORKS
+  ============================================================ -->
+  <section class="features-section" id="features" aria-labelledby="features-title">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">HOW IT WORKS</div>
+        <h2 class="section-title" id="features-title">From image to data in three steps</h2>
+        <p class="section-subtitle">
+          A dead-simple API that handles all the complexity of receipt parsing for you.
+        </p>
+      </div>
+
+      <div class="how-steps">
+
+        <!-- Step 1: Upload -->
+        <div class="how-step">
+          <div class="step-number-wrap">
+            <div class="step-number">01</div>
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">Upload</h3>
+            <p class="step-body">
+              Send any receipt image — restaurant, grocery, retail, invoices — via a simple
+              <code>POST</code> request. Supports JPG, PNG, and PDF formats up to 5MB.
+            </p>
+            <div class="step-code-snippet">
+              <pre><code>POST /api/parse
+Content-Type: multipart/form-data
+
+file: &lt;receipt.jpg&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="step-connector" aria-hidden="true">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">↓</div>
+        </div>
+
+        <!-- Step 2: Parse -->
+        <div class="how-step">
+          <div class="step-number-wrap">
+            <div class="step-number">02</div>
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">Parse</h3>
+            <p class="step-body">
+              Our AI extracts every field: merchant name, date, line items, subtotals, tax, tip,
+              payment method, and more — even from handwritten or crumpled receipts.
+            </p>
+            <div class="step-tags">
+              <span class="tag">Merchant Name</span>
+              <span class="tag">Line Items</span>
+              <span class="tag">Totals</span>
+              <span class="tag">Tax &amp; Tip</span>
+              <span class="tag">Payment Method</span>
+              <span class="tag">Date &amp; Time</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="step-connector" aria-hidden="true">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">↓</div>
+        </div>
+
+        <!-- Step 3: Integrate -->
+        <div class="how-step">
+          <div class="step-number-wrap">
+            <div class="step-number">03</div>
+          </div>
+          <div class="step-content">
+            <h3 class="step-title">Integrate</h3>
+            <p class="step-body">
+              Receive clean structured JSON ready to plug into your app, accounting software,
+              or database. No post-processing needed.
+            </p>
+            <div class="step-code-snippet">
+              <pre><code>{
+  "merchant_name": "The Golden Fork",
+  "total": 106.21,
+  "line_items": [...]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       DEMO SECTION
+  ============================================================ -->
+  <section class="demo-section" id="demo" aria-labelledby="demo-title">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">INTERACTIVE DEMO</div>
+        <h2 class="section-title" id="demo-title">Try It Live</h2>
+        <p class="section-subtitle">
+          Upload a receipt or try one of our samples — no API key required
+        </p>
+      </div>
+
+      <div class="demo-container">
+
+        <!-- Left: Input Panel -->
+        <div class="panel upload-panel">
+          <div class="panel-label">INPUT</div>
+
+          <!-- Sample Buttons -->
+          <div class="samples-row">
+            <span class="samples-label">Try a sample:</span>
+            <button class="sample-btn" data-sample="restaurant">🍕 Restaurant</button>
+            <button class="sample-btn" data-sample="grocery">🛒 Grocery</button>
+            <button class="sample-btn" data-sample="gym">🏋️ Gym Invoice</button>
+          </div>
+
+          <!-- Drop Zone -->
+          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload receipt file">
+            <div class="dropzone-inner">
+              <div class="dropzone-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                  <rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16 14h16M16 20h16M16 26h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="36" cy="36" r="8" fill="var(--gradient-start)"/>
+                  <path d="M36 32v8M32 36h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="dropzone-text">Drag &amp; drop your receipt here</p>
+              <p class="dropzone-subtext">JPG, PNG, or PDF · Max 5MB</p>
+              <label class="btn-upload" for="file-input">Choose File</label>
+              <input type="file" id="file-input" accept="image/jpeg,image/png,application/pdf" hidden />
+            </div>
+          </div>
+
+          <!-- Image Preview -->
+          <div class="preview-area" id="preview-area" style="display:none;">
+            <img id="preview-img" src="" alt="Receipt preview" />
+            <button class="btn-clear" id="btn-clear" aria-label="Remove file">✕ Remove</button>
+          </div>
+
+          <!-- Parse Button -->
+          <button class="btn-parse" id="btn-parse" disabled aria-label="Parse the selected receipt">
+            <span class="btn-parse-text">Parse Receipt</span>
+            <span class="btn-parse-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- Error Message -->
+          <div class="error-msg" id="error-msg" role="alert" style="display:none;"></div>
+        </div>
+
+        <!-- Panel Arrow / Divider -->
+        <div class="panel-arrow" aria-hidden="true">
+          <div class="arrow-track">
+            <div class="arrow-dot"></div>
+            <div class="arrow-dot"></div>
+            <div class="arrow-dot"></div>
+          </div>
+        </div>
+
+        <!-- Right: Output Panel -->
+        <div class="panel output-panel">
+          <div class="panel-label">OUTPUT</div>
+
+          <!-- Idle State -->
+          <div class="output-idle" id="output-idle" aria-live="polite">
+            <div class="idle-icon" aria-hidden="true">{ }</div>
+            <p class="idle-text">Your parsed data will appear here</p>
+          </div>
+
+          <!-- Loading State -->
+          <div class="output-loading" id="output-loading" style="display:none;" aria-live="polite" aria-label="Parsing receipt">
+            <div class="loader-bars" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <p class="loading-text">Parsing receipt<span class="loading-dots"></span></p>
+          </div>
+
+          <!-- Result State -->
+          <div class="output-result" id="output-result" style="display:none;" aria-live="polite">
+            <div class="result-header">
+              <div class="result-badge">✓ Parsed Successfully</div>
+              <div class="result-time" id="result-time"></div>
+            </div>
+
+            <!-- Parsed Field Cards -->
+            <div class="result-cards" id="result-cards"></div>
+
+            <!-- Raw JSON Block -->
+            <div class="json-block" id="json-block">
+              <button class="btn-copy-json" id="btn-copy-json" aria-label="Copy JSON to clipboard">Copy JSON</button>
+              <pre id="json-output" aria-label="Parsed JSON output"></pre>
+            </div>
+
+            <!-- Post-Parse CTA -->
+            <div class="result-cta" id="result-cta" style="display:none;">
+              <p class="cta-text">Want unlimited access? Get your API key below.</p>
+              <a href="#pricing" class="btn-cta">Get your API key →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRICING SECTION
+  ============================================================ -->
+  <section class="pricing-section" id="pricing" aria-labelledby="pricing-title">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">PRICING</div>
+        <h2 class="section-title" id="pricing-title">Simple, transparent pricing</h2>
+        <p class="section-subtitle">
+          Start free, scale as you grow. No hidden fees, no surprises.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+
+        <!-- Free Tier -->
+        <div class="pricing-card">
+          <div class="pricing-icon" aria-hidden="true">🚀</div>
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">
+            <span class="price-amount">$0</span>
+            <span class="price-period">/month</span>
+          </div>
+          <ul class="pricing-features" aria-label="Free tier features">
+            <li><span class="feature-check" aria-hidden="true">✓</span> 500 requests/month</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> 100 requests/hour</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> All receipt types</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> JSON output</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> Community support</li>
+          </ul>
+          <div class="pricing-quote">
+            "Perfect for testing integrations and exploring the API."
+          </div>
+          <button class="btn-pricing" data-plan="free" data-price="$0/month" aria-label="Get Free API Key">
+            Get Free Key
+          </button>
+        </div>
+
+        <!-- Starter Tier -->
+        <div class="pricing-card">
+          <div class="pricing-icon" aria-hidden="true">⚡</div>
+          <div class="pricing-tier">Starter</div>
+          <div class="pricing-price">
+            <span class="price-amount">$12</span>
+            <span class="price-period">/month</span>
+          </div>
+          <ul class="pricing-features" aria-label="Starter tier features">
+            <li><span class="feature-check" aria-hidden="true">✓</span> 5,000 requests/month</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> 500 requests/hour</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> All receipt types</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> JSON output</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> Email support</li>
+          </ul>
+          <div class="pricing-quote">
+            "Great for side projects and small production apps."
+          </div>
+          <button class="btn-pricing" data-plan="starter" data-price="$12/month" aria-label="Get Started with Starter plan">
+            Get Started
+          </button>
+        </div>
+
+        <!-- Pro Tier (Recommended) -->
+        <div class="pricing-card pricing-card--pro">
+          <div class="pricing-recommended" aria-label="Recommended plan">Recommended</div>
+          <div class="pricing-icon" aria-hidden="true">⭐</div>
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price">
+            <span class="price-amount">$35</span>
+            <span class="price-period">/month</span>
+          </div>
+          <ul class="pricing-features" aria-label="Pro tier features">
+            <li><span class="feature-check" aria-hidden="true">✓</span> 25,000 requests/month</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> 2,000 requests/hour</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> All receipt types</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> JSON output</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> Priority email support</li>
+          </ul>
+          <div class="pricing-quote pricing-quote--pro">
+            "The sweet spot for serious indie developers and growing teams."
+          </div>
+          <button class="btn-pricing btn-pricing--pro" data-plan="pro" data-price="$35/month" aria-label="Get Started with Pro plan">
+            Get Started
+          </button>
+        </div>
+
+        <!-- Business Tier -->
+        <div class="pricing-card">
+          <div class="pricing-icon" aria-hidden="true">🏢</div>
+          <div class="pricing-tier">Business</div>
+          <div class="pricing-price">
+            <span class="price-amount">$109</span>
+            <span class="price-period">/month</span>
+          </div>
+          <ul class="pricing-features" aria-label="Business tier features">
+            <li><span class="feature-check" aria-hidden="true">✓</span> 150,000 requests/month</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> Unlimited rate limit</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> All receipt types</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> JSON output</li>
+            <li><span class="feature-check" aria-hidden="true">✓</span> Dedicated support</li>
+          </ul>
+          <div class="pricing-quote">
+            "Built for high-volume enterprise workloads."
+          </div>
+          <button class="btn-pricing" data-plan="business" data-price="$109/month" aria-label="Get Started with Business plan">
+            Get Started
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon">▣</span>
+          <span class="logo-text">ReceiptParser<span class="logo-accent">API</span></span>
+        </div>
+        <p class="footer-tagline">The receipt parsing API for modern applications.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#features" class="footer-link">Features</a>
+        <a href="#demo" class="footer-link">Demo</a>
+        <a href="#pricing" class="footer-link">Pricing</a>
+        <a href="#" class="footer-link">Documentation</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 ReceiptParserAPI. Built for developers.</p>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       EMAIL MODAL (#modal-email)
+  ============================================================ -->
+  <div class="modal-overlay" id="modal-email" role="dialog" aria-modal="true" aria-labelledby="modal-email-title" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" id="modal-email-close" aria-label="Close modal">✕</button>
+
+      <!-- Default content (plan selection view) -->
+      <div id="modal-email-content">
+        <div class="modal-plan-icon" id="modal-plan-icon" aria-hidden="true">🚀</div>
+        <h2 class="modal-title" id="modal-email-title">Get your <span id="modal-plan-name">Free</span> API key</h2>
+        <p class="modal-plan-price" id="modal-plan-price">$0/month</p>
+
+        <ul class="modal-features" id="modal-features" aria-label="Plan features"></ul>
+
+        <form id="modal-email-form" novalidate>
+          <label class="modal-label" for="modal-email-input">Email address</label>
+          <input
+            type="email"
+            id="modal-email-input"
+            name="email"
+            class="modal-input"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+          />
+          <div class="modal-error" id="modal-form-error" role="alert" style="display:none;"></div>
+          <button type="submit" class="btn-modal-submit" id="modal-submit-btn">
+            <span id="modal-submit-text">Get Free Key</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success content (free plan) -->
+      <div id="modal-email-success" style="display:none;">
+        <div class="modal-success-icon" aria-hidden="true">✓</div>
+        <h2 class="modal-title">You're all set!</h2>
+        <p class="modal-success-body">
+          Your free API key is on its way to <strong id="modal-success-email"></strong>.
+          Check your inbox for your key and getting-started guide.
+        </p>
+        <p class="modal-success-note">It may take a few minutes to arrive. Check your spam folder if you don't see it.</p>
+        <button class="btn-modal-close-success" id="modal-close-success">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SUCCESS MODAL (#modal-success) — Stripe redirect success
+  ============================================================ -->
+  <div class="modal-overlay" id="modal-success" role="dialog" aria-modal="true" aria-labelledby="modal-success-title" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" id="modal-success-close" aria-label="Close modal">✕</button>
+      <div class="modal-success-icon success-green" aria-hidden="true">✓</div>
+      <h2 class="modal-title" id="modal-success-title">Payment Successful!</h2>
+      <p class="modal-success-body">
+        Your <strong id="success-plan-name"></strong> API key is on its way. Check your email at
+        <strong id="success-email"></strong> for your API key and getting-started guide.
+      </p>
+      <p class="modal-success-note">It may take a few minutes to arrive. Check your spam folder if you don't see it.</p>
+      <button class="btn-modal-close-success" id="success-modal-dismiss">Close</button>
+    </div>
+  </div>
+
+  <!-- Mobile sticky CTA bar -->
+  <div class="mobile-sticky-cta">
+    <a href="#pricing" class="mobile-sticky-btn">Get API Key →</a>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/pricing.js"></script>
+</body>
+</html>
