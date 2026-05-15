@@ -144,9 +144,9 @@ module.exports = async function handler(req, res) {
   // ── 4. Resolve image (uploaded file or sample URL) ─────────────────────────
   try {
     if (fileBuffer && fileBuffer.length > 0) {
-      // Validate file size: 5 MB max
-      if (fileBuffer.length > 5 * 1024 * 1024) {
-        return res.status(400).json({ error: 'File too large. Maximum size is 5MB.' });
+      // Validate file size: 8 MB max
+      if (fileBuffer.length > 8 * 1024 * 1024) {
+        return res.status(400).json({ error: 'File too large. Maximum size is 8 MB.' });
       }
     } else if (fields.sampleUrl) {
       const sample = await fetchSampleImage(fields.sampleUrl);
