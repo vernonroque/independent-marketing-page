@@ -195,12 +195,14 @@ module.exports = async function handler(req, res) {
         ...(demoApiKey ? { 'Authorization': `Bearer ${demoApiKey}` } : {}),
       },
       body:    form,
-      timeout: 28000, // 28s — under Vercel's 30s max
+      timeout: 90000, // 90s — vercel maxDuration is 300s
     });
 
     const backendContentType = backendRes.headers.get('content-type') || '';
 
     if (!backendContentType.includes('application/json')) {
+      const rawText = await backendRes.text().catch(() => '(unreadable)');
+      console.error('[parse-receipt] Non-JSON backend response:', backendRes.status, rawText.slice(0, 200));
       throw new Error('Backend returned a non-JSON response.');
     }
 
@@ -218,10 +220,19 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error('[parse-receipt] Backend error:', err.message);
 
-    if (err.message && err.message.includes('429')) {
+    if (err.message?.includes('429')) {
       return res.status(429).json({ error: 'API rate limit reached. Please try again shortly.' });
     }
+    if (err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.type === 'system') {
+      return res.status(502).json({ error: 'Parsing service is temporarily unavailable. Please try again in a moment.' });
+    }
+    if (err.type === 'request-timeout' || err.message?.includes('network timeout')) {
+      return res.status(504).json({ error: 'Request timed out. Try a smaller or single-page receipt.' });
+    }
+    if (err.message === 'Backend returned a non-JSON response.') {
+      return res.status(502).json({ error: 'Parsing service is warming up. Please wait 10 seconds and try again.' });
+    }
 
-    return res.status(502).json({ error: 'Receipt parsing failed. Please try a clearer image.' });
+    return res.status(502).json({ error: 'Receipt parsing failed. Please try again or contact support.' });
   }
 };
