@@ -28,7 +28,7 @@ module.exports.config = {
 const rateLimitStore = new Map();
 
 const RATE_LIMIT = {
-  MAX_REQUESTS: 3,                        // free demo parses per window
+  MAX_REQUESTS: 15,                        // free demo parses per window
   WINDOW_MS: 24 * 60 * 60 * 1000,        // 24-hour rolling window
 };
 
@@ -124,7 +124,7 @@ module.exports = async function handler(req, res) {
   // ── 2. Rate limit check ───────────────────────────────────────────────────
   if (isRateLimited(clientIp)) {
     return res.status(429).json({
-      error: `You've used all ${RATE_LIMIT.MAX_REQUESTS} free demo parses for today. Get an API key below for unlimited access!`,
+      error: `You've used all ${RATE_LIMIT.MAX_REQUESTS} free demo parses in the last 24 hours. Get an API key below for unlimited access!`,
     });
   }
 
