@@ -796,7 +796,7 @@ button {
 
 .demo-container {
   display: grid;
-  grid-template-columns: 1fr 64px 1fr;
+  grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
   gap: 0;
   align-items: start;
   margin-top: 0;
@@ -812,6 +812,7 @@ button {
   padding: 28px;
   position: relative;
   transition: border-color 0.3s ease;
+  max-width: 500px;
 }
 
 .panel:hover {
