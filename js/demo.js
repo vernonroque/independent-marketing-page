@@ -232,6 +232,25 @@ if (btnCopyJson) {
   });
 }
 
+// ── Image Compression ─────────────────────────────
+async function compressImage(file, maxDimension = 1600, quality = 0.75) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width  = Math.round(img.width  * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => resolve(blob ?? file), 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+}
+
 // ── Parse Handler ─────────────────────────────────
 async function handleParse() {
   hideError();
@@ -244,7 +263,10 @@ async function handleParse() {
     formData.append('ref_source', sessionStorage.getItem('ref_source') || 'direct');
 
     if (currentFile) {
-      formData.append('receipt', currentFile);
+      const fileToUpload = currentFile.type.startsWith('image/')
+        ? await compressImage(currentFile)
+        : currentFile;
+      formData.append('receipt', fileToUpload, 'receipt.jpg');
     } else if (currentSample) {
       // Build absolute URL so the serverless function can fetch the sample
       const sampleUrl = new URL(SAMPLES[currentSample].url, window.location.href).href;
